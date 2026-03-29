@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --font-headline: "Newsreader", serif;
+  --font-body: "Newsreader", serif;
+  --font-label: "Newsreader", serif;
+}
+
+@layer base {
+  body {
+    @apply bg-[#fff9ed] text-[#1f1c0b] font-body min-h-screen;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuApJzyeSEV738Ss8DAMlfCXCGuv2CXw41TiiMKRHjOwGWfO_MlYpAU__BqhTxRGp192af3uoL7QKwJyk0MwQwsK2U0gn-2IImPgIOGsP2XQRrSnv_dqL6lqj5eExPEKr2yAtjp0QuUSbbuMsIhugcRxvimZMqp1GpWBKvF1npLHzeEWQR1cDoHlStG5CaLbKnEqW1ujxf17RjFcbWXqFYaGPH0RKkvXgvlvOBu8IXk79Ac8TQRFF6Gzuq8z9K0npEr_m7aZF8bbSCc);
+    background-repeat: repeat;
+  }
+}
+
+@layer components {
+  .academic-card {
+    @apply relative overflow-hidden bg-[#f7eed2] rounded-xl;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+  }
+
+  .academic-card::after {
+    content: '';
+    @apply absolute inset-0 pointer-events-none z-10;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent 40%, rgba(0,0,0,0.05));
+  }
+
+  .academic-btn {
+    @apply relative overflow-hidden transition-all active:scale-[0.98];
+  }
+
+  .academic-btn::after {
+    content: '';
+    @apply absolute inset-0 pointer-events-none z-10;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent 50%, rgba(0,0,0,0.1));
+  }
+
+  .glass-parchment {
+    @apply bg-[#fff9ed]/80 backdrop-blur-xl;
+  }
+
+  .ink-line {
+    @apply h-[2px];
+    background: linear-gradient(90deg, #6f5d00 0%, #ebe2c8 100%);
+  }
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+}
