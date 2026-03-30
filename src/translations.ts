@@ -72,7 +72,10 @@ export const translations = {
     satellite: "Satellite Campus",
     exportJson: "Export JSON (Backup)",
     resetAll: "Reset All Data",
-    confirmResetAll: "Are you sure you want to delete ALL data? This cannot be undone."
+    confirmResetAll: "Are you sure you want to delete ALL data? This cannot be undone.",
+    rank1: "1st",
+    rank2: "2nd",
+    rank3: "3rd"
   },
   el: {
     appName: "Σχολικός Διαγωνισμός",
@@ -146,6 +149,9 @@ export const translations = {
     satellite: "Δορυφορική Πανεπιστημιούπολη",
     exportJson: "Εξαγωγή JSON (Backup)",
     resetAll: "Επαναφορά Όλων των Δεδομένων",
-    confirmResetAll: "Είστε σίγουροι ότι θέλετε να διαγράψετε ΟΛΑ τα δεδομένα; Αυτή η ενέργεια δεν αναιρείται."
+    confirmResetAll: "Είστε σίγουροι ότι θέλετε να διαγράψετε ΟΛΑ τα δεδομένα; Αυτή η ενέργεια δεν αναιρείται.",
+    rank1: "1ος",
+    rank2: "2ος",
+    rank3: "3ος"
   }
 };

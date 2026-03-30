@@ -46,11 +46,14 @@ export default function App() {
   });
   const [bgImage, setBgImage] = useState<string>(() => {
     const saved = localStorage.getItem('scholastic_settings');
-    return saved ? JSON.parse(saved).bgImage : '';
+    if (saved) return JSON.parse(saved).bgImage;
+    return import.meta.env.VITE_INITIAL_BG_IMAGE || '';
   });
   const [bgOpacity, setBgOpacity] = useState<number>(() => {
     const saved = localStorage.getItem('scholastic_settings');
-    return saved ? JSON.parse(saved).bgOpacity : 0.1;
+    if (saved) return JSON.parse(saved).bgOpacity;
+    const envVal = import.meta.env.VITE_INITIAL_BG_OPACITY;
+    return envVal ? parseFloat(envVal) : 0.1;
   });
   const [showSettings, setShowSettings] = useState(false);
   const t = translations[lang];
@@ -135,7 +138,7 @@ export default function App() {
     }));
   }, [teams]);
 
-  const handleAdjustScore = (teamId: string, amount: number, reason: string = 'Academic Merit') => {
+  const handleAdjustScore = (teamId: string, amount: number, reason: string = t.merit) => {
     setTeams(prev => prev.map(t => t.id === teamId ? { ...t, score: Math.max(0, t.score + amount) } : t));
     setTotalMoves(prev => prev + 1);
     setLastScoreChange({ teamId, amount });
@@ -427,9 +430,9 @@ export default function App() {
                 <header className="flex justify-between items-center">
                   <div>
                     <h2 className="text-4xl font-headline font-bold text-[#000a1e] tracking-tight">
-                      {t.teams}
+                      {normalizeGreek(t.teams, lang)}
                     </h2>
-                    <p className="text-[#44474e] italic">{t.sessionTitle}</p>
+                    <p className="text-[#44474e] italic">{session.title}</p>
                   </div>
                   <div className="flex gap-4">
                     <button 
@@ -596,7 +599,7 @@ export default function App() {
                 {/* 2nd Place */}
                 <div className="w-full md:w-1/3 order-2 md:order-1">
                   <div className="bg-[#f1e8cd] p-8 text-center border-r border-[#ebe2c8] academic-card rounded-l-[12px] md:rounded-r-none">
-                    <span className="text-4xl font-headline font-bold text-[#44474e] italic mb-4 block">2nd</span>
+                    <span className="text-4xl font-headline font-bold text-[#44474e] italic mb-4 block">{normalizeGreek(t.rank2, lang)}</span>
                     <h4 className="text-xl font-bold text-[#000a1e] mb-1 uppercase tracking-tighter">{normalizeGreek(sortedTeams[1]?.name || '---', lang)}</h4>
                     <div className="text-5xl font-headline font-black text-[#002147] py-4">{sortedTeams[1]?.score || 0}</div>
                   </div>
@@ -607,7 +610,7 @@ export default function App() {
                     <div className="absolute top-0 right-0 p-4">
                       <Trophy className="text-[#ffe261] drop-shadow-[0_0_10px_rgba(255,226,97,0.5)]" size={32} fill="currentColor" />
                     </div>
-                    <span className="text-5xl font-headline font-bold text-[#ffe261] italic mb-4 block drop-shadow-sm">1st</span>
+                    <span className="text-5xl font-headline font-bold text-[#ffe261] italic mb-4 block drop-shadow-sm">{normalizeGreek(t.rank1, lang)}</span>
                     <h4 className="text-2xl font-bold text-white mb-1 uppercase tracking-widest">{normalizeGreek(sortedTeams[0].name, lang)}</h4>
                     <div className="text-7xl font-headline font-black text-[#ffe261] py-6 drop-shadow-md">{sortedTeams[0].score}</div>
                   </div>
@@ -615,7 +618,7 @@ export default function App() {
                 {/* 3rd Place */}
                 <div className="w-full md:w-1/3 order-3 md:order-3">
                   <div className="bg-[#f1e8cd] p-8 text-center border-l border-[#ebe2c8] academic-card rounded-r-[12px] md:rounded-l-none">
-                    <span className="text-3xl font-headline font-bold text-[#44474e] italic mb-4 block">3rd</span>
+                    <span className="text-3xl font-headline font-bold text-[#44474e] italic mb-4 block">{normalizeGreek(t.rank3, lang)}</span>
                     <h4 className="text-lg font-bold text-[#000a1e] mb-1 uppercase tracking-tighter">{normalizeGreek(sortedTeams[2]?.name || '---', lang)}</h4>
                     <div className="text-4xl font-headline font-black text-[#002147] py-4">{sortedTeams[2]?.score || 0}</div>
                   </div>
@@ -753,7 +756,11 @@ export default function App() {
               <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20 items-center">
                 <div className="lg:col-span-5 order-2 lg:order-1">
                   <h2 className="text-4xl font-headline font-bold text-[#000a1e] mb-6 leading-tight">
-                    {t.laureateExcellence.split(' Excellence')[0]}<br/><span className="text-[#af2b3e]">Excellence</span>
+                    {lang === 'el' ? (
+                      <>Ο Δαφνοστεφής της<br/><span className="text-[#af2b3e]">Αριστείας</span></>
+                    ) : (
+                      <>The Laureate of<br/><span className="text-[#af2b3e]">Excellence</span></>
+                    )}
                   </h2>
                   <div className="bg-[#ebe2c8] p-8 border-l-4 border-[#6f5d00] relative academic-card">
                     <span className="absolute -top-4 -left-4 text-6xl text-[#6f5d00] opacity-20 font-serif">“</span>
@@ -785,7 +792,7 @@ export default function App() {
                   {/* 2nd Place */}
                   <div className="w-full md:w-1/3 order-2 md:order-1">
                     <div className="bg-[#f1e8cd] p-8 text-center border-r border-[#ebe2c8] academic-card rounded-l-[12px] md:rounded-r-none">
-                      <span className="text-4xl font-headline font-bold text-[#44474e] italic mb-4 block">2nd</span>
+                      <span className="text-4xl font-headline font-bold text-[#44474e] italic mb-4 block">{normalizeGreek(t.rank2, lang)}</span>
                       <h4 className="text-xl font-bold text-[#000a1e] mb-1 uppercase tracking-tighter">{normalizeGreek(sortedTeams[1]?.name || '---', lang)}</h4>
                       <div className="text-5xl font-headline font-black text-[#002147] py-4">{sortedTeams[1]?.score || 0}</div>
                       <p className="text-xs uppercase tracking-widest text-[#6f5d00] font-bold">{normalizeGreek(t.pointsSecured, lang)}</p>
@@ -797,7 +804,7 @@ export default function App() {
                       <div className="absolute top-0 right-0 p-4">
                         <Trophy className="text-[#ffe261]" size={32} fill="currentColor" />
                       </div>
-                      <span className="text-5xl font-headline font-bold text-[#ffe261] italic mb-4 block">1st</span>
+                      <span className="text-5xl font-headline font-bold text-[#ffe261] italic mb-4 block">{normalizeGreek(t.rank1, lang)}</span>
                       <h4 className="text-2xl font-bold text-white mb-1 uppercase tracking-widest">{normalizeGreek(sortedTeams[0].name, lang)}</h4>
                       <div className="text-7xl font-headline font-black text-[#ffe261] py-6">{sortedTeams[0].score}</div>
                       <p className="text-xs uppercase tracking-widest text-[#ebe2c8] font-bold">{normalizeGreek(t.supremeDistinction, lang)}</p>
@@ -806,7 +813,7 @@ export default function App() {
                   {/* 3rd Place */}
                   <div className="w-full md:w-1/3 order-3 md:order-3">
                     <div className="bg-[#f1e8cd] p-8 text-center border-l border-[#ebe2c8] academic-card rounded-r-[12px] md:rounded-l-none">
-                      <span className="text-3xl font-headline font-bold text-[#44474e] italic mb-4 block">3rd</span>
+                      <span className="text-3xl font-headline font-bold text-[#44474e] italic mb-4 block">{normalizeGreek(t.rank3, lang)}</span>
                       <h4 className="text-lg font-bold text-[#000a1e] mb-1 uppercase tracking-tighter">{normalizeGreek(sortedTeams[2]?.name || '---', lang)}</h4>
                       <div className="text-4xl font-headline font-black text-[#002147] py-4">{sortedTeams[2]?.score || 0}</div>
                       <p className="text-xs uppercase tracking-widest text-[#6f5d00] font-bold">{normalizeGreek(t.pointsSecured, lang)}</p>

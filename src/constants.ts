@@ -1,6 +1,18 @@
 import { Team, ContestSession, Award } from './types';
 
-export const INITIAL_TEAMS: Team[] = [
+// Helper to parse JSON from environment variables
+const parseEnvJson = <T>(key: string, defaultValue: T): T => {
+  const envValue = import.meta.env[key];
+  if (!envValue) return defaultValue;
+  try {
+    return JSON.parse(envValue);
+  } catch (e) {
+    console.error(`Error parsing environment variable ${key}:`, e);
+    return defaultValue;
+  }
+};
+
+export const INITIAL_TEAMS: Team[] = parseEnvJson('VITE_INITIAL_TEAMS_JSON', [
   {
     id: '1',
     name: 'House of Socrates',
@@ -37,18 +49,18 @@ export const INITIAL_TEAMS: Team[] = [
     displayId: 'IV',
     color: 'outline',
   },
-];
+]);
 
-export const INITIAL_SESSION: ContestSession = {
+export const INITIAL_SESSION: ContestSession = parseEnvJson('VITE_INITIAL_SESSION_JSON', {
   title: 'Introduction to Classical Philosophy: The Socratic Debate',
   hall: 'Oxford Hall A',
   currentQuestion: 12,
   totalQuestions: 20,
   timerSeconds: 522, // 08:42
   status: 'active',
-};
+});
 
-export const INITIAL_AWARDS: Award[] = [
+export const INITIAL_AWARDS: Award[] = parseEnvJson('VITE_INITIAL_AWARDS_JSON', [
   {
     id: 'a1',
     title: 'Most Eloquent Orator',
@@ -70,4 +82,4 @@ export const INITIAL_AWARDS: Award[] = [
     recipient: 'Julian K. Thorne',
     icon: 'library_books',
   },
-];
+]);
